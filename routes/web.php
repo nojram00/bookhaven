@@ -50,7 +50,7 @@ Route::controller(BookController::class)->group(function(){
     Route::get('/books', 'index')->middleware(['auth'])->name('books');
     Route::get('/dashboard', 'book_dashboard')->middleware(['auth', 'admin'])->name('dashboard');
     Route::get('/book/{book}', 'edit_book')->middleware(['auth', 'admin'])->name('edit-book');
-    Route::patch('/book/{book}', 'save_book')->middleware(['auth','admin'])->name('save-book');
+    Route::post('/book/{book}', 'save_book')->middleware(['auth','admin'])->name('save-book');
     Route::get('/create-book', 'create')->middleware(['auth','admin'])->name('add-book');
     Route::post('/create-book', 'create_book')->middleware(['auth','admin'])->name('create-book');
     Route::delete('/book/{book}','destroy')->middleware(['auth', 'admin'])->name('delete-book');

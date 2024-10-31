@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateBookRequest;
 use App\Http\Requests\UpdateBookInfo;
 use App\Models\Book;
+use App\Rules\BookGenre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -80,12 +81,23 @@ class BookController extends Controller
         ]);
     }
 
-    public function save_book(Book $book, UpdateBookInfo $request)
+    public function save_book(Book $book, Request $request)
     {
 
-        // dd($request->validated());
+        if ($request->hasFile('cover_photo'))
+        {
+            $path = $request->file('cover_photo')->store('cover_photo', 'public');
+        }
 
-        $updated = $book->update($request->validated());
+        $updated = $book->update([
+            'book_name' => $request->input('book_name'),
+            'author' => $request->input('author'),
+            'price' => $request->input('price'),
+            'genre' => $request->input('genre'),
+            'book_overview' => $request->input('book_overview'),
+            'cover_photo' => $path ?? \null,
+            'year_published' => $request->input('year_published')
+        ]);
 
         if($updated)
         {
@@ -104,7 +116,34 @@ class BookController extends Controller
     public function create_book(Request $request)
     {
 
-        $book = Book::create($request->all());
+        $request->validate([
+            'book_name' => ['required','string'],
+            'author' => ['required','string'],
+            'price' => ['required','numeric'],
+            'genre' => ['required', new BookGenre()],
+            'book_overview' => ['string'],
+            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'year_published' => ['required', 'digits:4', 'integer', 'before_or_equal:' . date('Y')]
+        ]);
+
+        // dd($request->input('year_published'));
+
+        if($request->file('cover_photo'))
+        {
+            $path = $request->file('cover_photo')->store('cover_photo', 'public');
+        }
+
+        $book = Book::create(
+            [
+                'book_name' => $request->input('book_name'),
+                'author' => $request->input('author'),
+                'price' => $request->input('price'),
+                'genre' => $request->input('genre'),
+                'book_overview' => $request->input('book_overview'),
+                'year_published' => $request->input('year_published'),
+                'cover_photo' => $path ?? \null,
+            ]
+        );
 
         // dd($book);
 

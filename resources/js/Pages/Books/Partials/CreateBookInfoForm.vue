@@ -8,7 +8,9 @@
             </p>
         </header>
 
-        <form @submit.prevent="form.post(route('create-book'))" class="space-y-4">
+        <form @submit.prevent="form.post(route('create-book'), {
+            forceFormData : true
+        })" class="space-y-4">
             <div>
                 <InputLabel for="book-name" value="Book Name"/>
 
@@ -65,6 +67,13 @@
             </div>
 
             <div>
+                <InputLabel for="cover" value="Cover Photo"/>
+
+                <input type="file" id="cover" @change="handleFile" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-1 block w-full">
+                </input>
+            </div>
+
+            <div>
                 <InputLabel for="genre" value="Genre"/>
 
                 <select v-model="form.genre" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -116,6 +125,7 @@ const form = useForm({
     price : 0,
     genre : "",
     book_overview : "",
+    cover_photo : null,
     year_published : new Date().getFullYear() - 30
 })
 
@@ -130,6 +140,10 @@ const years = computed(() => {
 
     return years_array;
 });
+
+const handleFile = (event) => {
+    form.cover_photo = event.target.files[0];
+}
 
 </script>
 <style lang="">

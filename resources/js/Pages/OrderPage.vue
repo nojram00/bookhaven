@@ -122,6 +122,7 @@ const view_detail = (_title, _content) => {
                         :author="book.author"
                         :genre="book.genre"
                         :overview="book.overview"
+                        :cover_photo="book.cover_photo"
                         :callback="view_detail"
                     />
                 </div>

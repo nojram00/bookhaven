@@ -1,12 +1,12 @@
 <script setup>
-import { useForm } from "@inertiajs/vue3";
+import { useForm, router } from "@inertiajs/vue3";
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Dropdown from '@/Components/Bookhaven/Dropdown.vue';
 import DropdownItem from '@/Components/DropdownItem.vue';
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
     name : {
@@ -40,9 +40,38 @@ const form = useForm({
     author : props.author,
     price : props.price,
     genre : props.current_genre,
-    year_published : props.year_published
-
+    year_published : props.year_published,
+    cover_photo : null
 })
+
+const cover_photo = ref(null)
+
+const handleFile = (event) => {
+    form.cover_photo = event.target.files[0];
+
+    console.log(form.cover_photo)
+}
+
+const handleSubmit = () => {
+    const data = new FormData()
+
+    data.append('book_name', form.book_name)
+    data.append('author', form.author)
+    data.append('price', form.price)
+    data.append('genre', form.genre)
+    data.append('year_published', form.year_published)
+
+    if(form.cover_photo !== null)
+    {
+        data.append('cover_photo', cover_photo)
+    }
+
+
+    form.post(route('save-book', props.id), data, {
+        forceFormData : true
+    });
+
+}
 
 const years = computed(() => {
     const current_year = new Date().getFullYear()
@@ -73,7 +102,7 @@ const years = computed(() => {
 
 
 
-        <form @submit.prevent="form.patch(`/book/${props.id}`)" class="space-y-4">
+        <form @submit.prevent="handleSubmit" class="space-y-4">
             <div>
                 <InputLabel for="book-name" value="Book Name"/>
 
@@ -117,6 +146,13 @@ const years = computed(() => {
                     autocomplete="name"
                 />
 
+            </div>
+
+            <div>
+                <InputLabel for="cover" value="Cover Photo"/>
+
+                <input type="file" id="cover" @change="handleFile" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm m-1 block w-full">
+                </input>
             </div>
 
             <div>

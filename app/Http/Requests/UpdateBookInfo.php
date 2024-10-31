@@ -27,7 +27,33 @@ class UpdateBookInfo extends FormRequest
             'author' => ['required','string'],
             'price' => ['required','numeric'],
             'genre' => ['string', new BookGenre()],
-            'date_published' => ['date']
+            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'year_published' => ['required', 'digits:4', 'integer', 'before_or_equal:' . date('Y')]
+        ];
+    }
+
+    public function store_file()
+    {
+        if ($this->hasFile('cover_photo'))
+        {
+            $path = $this->file('cover_photo')->store('cover_photo', 'public');
+
+            return $path;
+        }
+
+        return null;
+    }
+
+    public function inputs()
+    {
+        return [
+            'book_name' => $this->input('book_name'),
+            'author' => $this->input('author'),
+            'price' => $this->input('price'),
+            'genre' => $this->input('genre'),
+            'book_overview' => $this->input('book_overview'),
+            'cover_photo' => $this->store_file(),
+            'year_published' => $this->input('year_published')
         ];
     }
 }

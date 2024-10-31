@@ -2,7 +2,7 @@
     <div class="card card-side bg-base-100 shadow-xl">
         <figure>
             <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjH29KmNjFdjfDtuUaUNcoc2mEyL7TDNEIig&s"
+            :src="cover_photo ? '/storage/' + cover_photo : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjH29KmNjFdjfDtuUaUNcoc2mEyL7TDNEIig&s'"
             alt="Movie" />
         </figure>
         <div class="card-body">
@@ -45,6 +45,9 @@ defineProps({
     },
     overview : {
         type: String
+    },
+    cover_photo : {
+        type : String
     },
     callback : {
         type : Object

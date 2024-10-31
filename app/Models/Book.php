@@ -15,7 +15,8 @@ class Book extends Model
         'author',
         'book_overview',
         'price',
-        'date_published'
+        'cover_photo',
+        'year_published'
     ];
 
     const GENRE =
