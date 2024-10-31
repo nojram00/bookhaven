@@ -42,6 +42,7 @@ class OrderController extends Controller
 
         if($result != null)
         {
+            $this->service->save_to_log("Add new order, $data->id");
             return redirect(route('order-info', $data->id))
                         ->with('message', "Checkout Success! Order Id: $data->id")
                         ->with('history', $request->header('X-History'));

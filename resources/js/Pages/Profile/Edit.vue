@@ -4,7 +4,7 @@ import MainLayout from '@/Layouts/Bookhaven/MainLayout.vue'
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
     mustVerifyEmail: {
@@ -40,6 +40,10 @@ defineProps({
 
                 <div class="p-4 sm:p-8 bg-base-200 shadow sm:rounded-lg">
                     <DeleteUserForm class="max-w-xl" />
+                </div>
+
+                <div class="p-4 sm:p-8 bg-base-200 shadow sm:rounded-lg">
+                    <Link :href="route('activity-log')" class="text-white">Activity Log</Link>
                 </div>
             </div>
         </div>

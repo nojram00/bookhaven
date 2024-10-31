@@ -1,3 +1,3 @@
 <template>
-    <img src=""/>
+    <img src="/gma_logo.png"/>
 </template>

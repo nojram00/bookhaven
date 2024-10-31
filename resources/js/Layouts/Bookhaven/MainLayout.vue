@@ -1,7 +1,8 @@
 <template>
     <div class="bg-slate-800 min-h-screen">
         <header class="bg-slate-600 h-[55px] p-3 flex flex-row items-center justify-center">
-            <div class="flex-1">
+            <div class="flex-1 flex flex-row items-center">
+                <ApplicationLogo class="w-[5rem] h-[3rem] fill-current text-gray-500" />
                 <h1 class="text-2xl font-bold text-white ml-10">Bookhaven</h1>
             </div>
             <div class="">
@@ -39,6 +40,7 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
 
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 const user = usePage().props.auth.user
 </script>
 <style lang="">

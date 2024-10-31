@@ -6,12 +6,20 @@ use App\Http\Requests\CreateBookRequest;
 use App\Http\Requests\UpdateBookInfo;
 use App\Models\Book;
 use App\Rules\BookGenre;
+use App\Services\BookhavenService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class BookController extends Controller
 {
+
+    protected $service;
+    public function __construct(BookhavenService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index(Request $request)
     {
 
@@ -101,6 +109,7 @@ class BookController extends Controller
 
         if($updated)
         {
+            $this->service->save_to_log("Edit book, $book->book_name");
             return redirect(route('edit-book', $book))->with('Message', 'Book Updated!');
         }
 
@@ -149,6 +158,7 @@ class BookController extends Controller
 
         if($book)
         {
+            $this->service->save_to_log("Create book, $book->book_name");
             return redirect(route('add-book'))->with('Message','Book Created!');
         }
 
@@ -157,6 +167,7 @@ class BookController extends Controller
 
     public function destroy(Book $book, Request $request)
     {
+        $book_name = $book->book_name;
         $validated = $request->validate(
             ['password' => ['required', 'current_password']]
         );
@@ -167,6 +178,7 @@ class BookController extends Controller
 
             if ($deleted)
             {
+                $this->service->save_to_log("Delete book, $book_name");
                 return redirect(route('dashboard'))->with('message','Book Deleted!');
             }
         }
