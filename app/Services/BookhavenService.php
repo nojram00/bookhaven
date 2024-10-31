@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\ActivityLog;
 use App\Models\Book;
 use App\Models\Order;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class BookhavenService {
@@ -35,5 +37,17 @@ class BookhavenService {
 
             return null;
         }
+    }
+
+    public function save_to_log($message_log)
+    {
+        $user_id = Auth::user()->id;
+
+        ActivityLog::create([
+            'user_id' => $user_id,
+            'log' => $message_log,
+            'datetime' => \now()
+        ]);
+
     }
 }

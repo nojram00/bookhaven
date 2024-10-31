@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
@@ -54,6 +55,10 @@ Route::controller(BookController::class)->group(function(){
     Route::post('/create-book', 'create_book')->middleware(['auth','admin'])->name('create-book');
     Route::delete('/book/{book}','destroy')->middleware(['auth', 'admin'])->name('delete-book');
     Route::get('/featured', 'featured_books')->name('featured');
+});
+
+Route::controller(ActivityLogController::class)->group(function(){
+    Route::get('/activity-log', 'index')->middleware(['auth'])->name('activity-log');
 });
 
 require __DIR__.'/auth.php';

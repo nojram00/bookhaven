@@ -27,6 +27,7 @@ return new class extends Migration
                     'fiction',
                     'political'
                 ]);
+            $table->string('cover_photo')->nullable();
             $table->text('author');
             $table->text('book_overview')->nullable();
             $table->decimal('price');

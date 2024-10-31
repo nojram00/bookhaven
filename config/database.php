@@ -93,6 +93,12 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'dsn' => env('MONGODB_URI', 'mongodb+srv://marjongodito0505:nojramnojram12345@app.t1uvd.mongodb.net/?retryWrites=true&w=majority'),
+            'database' => 'App',
+        ]
+
     ],
 
     /*

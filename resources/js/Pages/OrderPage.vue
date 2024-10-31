@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue';
 import { router, Head, Link, usePage } from '@inertiajs/vue3';
 import Card from '@/Components/Bookhaven/Card.vue'
 import MainLayout from '@/Layouts/Bookhaven/MainLayout.vue'
+import Footer from '@/Components/Bookhaven/Footer.vue'
 
 defineProps({
     books : {
@@ -111,7 +112,7 @@ const view_detail = (_title, _content) => {
                     </div>
                 </div>
             </aside>
-            <div class="flex flex-col items-center p-5 gap-10 w-full">
+            <div class="flex flex-col p-5 items-center min-h-screen gap-10 w-full">
                 <div class="container p-5 gap-8 grid grid-cols-3" v-if="books.data.length > 0">
                     <Card
                         v-for="book in books.data"
@@ -125,7 +126,7 @@ const view_detail = (_title, _content) => {
                     />
                 </div>
 
-                <div v-else class="self-center">
+                <div v-else class="self-center p-3">
                     <h1 class="text-2xl">No Results Found...</h1>
                 </div>
 
@@ -137,9 +138,13 @@ const view_detail = (_title, _content) => {
                         <Link :href="books.links[2].url" class="join-item btn">»</Link>
                     </div>
                 </div>
+
+
             </div>
         </div>
 
-
+        <div class="w-full">
+            <Footer />
+        </div>
     </MainLayout>
 </template>

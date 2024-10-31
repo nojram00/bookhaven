@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -27,3 +28,10 @@ Artisan::command('user-list', function(){
     $this->comment($users);
 
 })->purpose("Display All Users saved in the database");
+
+Artisan::command('insert-log', function(){
+    ActivityLog::create([
+        'log' => 'created a sample log',
+        'datetime' => now()
+    ]);
+});
