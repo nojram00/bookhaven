@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\DB;
 
 class BookhavenService {
 
+    /**
+     * Handles the creation of order
+     */
     public function create_order(User $user, Book $book)
     {
 

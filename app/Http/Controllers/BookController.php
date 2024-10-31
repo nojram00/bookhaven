@@ -156,8 +156,6 @@ class BookController extends Controller
             'year_published' => ['required', 'digits:4', 'integer', 'before_or_equal:' . date('Y')]
         ]);
 
-        // dd($request->input('year_published'));
-
         if($request->file('cover_photo'))
         {
             $path = $request->file('cover_photo')->store('cover_photo', 'public');

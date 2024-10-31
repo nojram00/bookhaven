@@ -9,11 +9,13 @@ use Inertia\Inertia;
 
 class ActivityLogController extends Controller
 {
+    /**
+     * Displays the activity log page which displays user's activities.
+     */
     public function index()
     {
         $logs = ActivityLog::where('user_id', Auth::user()->id);
 
-        // return $logs->get();
 
         return Inertia::render('ActLog', [
             "logs" => $logs->get()

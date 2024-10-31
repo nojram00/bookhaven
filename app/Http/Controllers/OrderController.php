@@ -16,11 +16,17 @@ use Inertia\Inertia;
 class OrderController extends Controller
 {
     protected $service;
+    /**
+     *  Injects the service.
+     */
     public function __construct(BookhavenService $service)
     {
         $this->service = $service;
     }
 
+    /**
+     * Order Dashboard (Accessible by admin)
+     */
     public function index()
     {
         $orders = Order::query();
@@ -33,10 +39,13 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     *  Create order action responsible for creating order
+     */
     public function order(Book $book, Request $request)
     {
 
-        $result = $this->service->create_order(Auth::user(), $book);
+        $result = $this->service->create_order(Auth::user(), $book); // User the create_order() form Bookhaven service.
 
         $data = Order::with('ordered_books', 'ordered_users')->find($result->id);
 
@@ -52,6 +61,9 @@ class OrderController extends Controller
 
     }
 
+    /**
+     *  Displays authenticated user orders.
+     */
     public function user_orders()
     {
         $auth_user = Auth::user();
@@ -64,6 +76,10 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     *  Displays the specific order together with the other info.
+     * (Book ordered/checked, User who created the transaction)
+     */
     public function order_info(Order $order)
     {
         return Inertia::render('OrderDetails', [
