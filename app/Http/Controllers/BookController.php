@@ -15,11 +15,20 @@ class BookController extends Controller
 {
 
     protected $service;
+    /**
+     *  Injects the Bookhaven Service which handles writing logs and creating orders.
+     *
+     *
+     */
+
     public function __construct(BookhavenService $service)
     {
         $this->service = $service;
     }
 
+    /**
+     *  This action displays the 'books' page which accessible to users and admin
+     */
     public function index(Request $request)
     {
 
@@ -68,6 +77,9 @@ class BookController extends Controller
         ]);
     }
 
+    /**
+     * This action is for displaying the dashboard together with the data from the database.
+     */
     public function book_dashboard()
     {
         $books = Book::query();
@@ -79,7 +91,9 @@ class BookController extends Controller
             'books' => $books,
         ]);
     }
-
+    /**
+     * This action is for displaying the 'Edit book' page.
+     */
     public function edit_book(Book $book)
     {
 
@@ -89,6 +103,9 @@ class BookController extends Controller
         ]);
     }
 
+    /**
+     *  Handles the book editing.
+     */
     public function save_book(Book $book, Request $request)
     {
 
@@ -122,6 +139,10 @@ class BookController extends Controller
             'genre' => Book::GENRE
         ]);
     }
+
+    /**
+     *  Handles the book creation.
+     */
     public function create_book(Request $request)
     {
 
@@ -165,6 +186,9 @@ class BookController extends Controller
         return redirect(route('add-book'))->with('Error', 'Book not created');
     }
 
+    /**
+     * For deleting books.
+     */
     public function destroy(Book $book, Request $request)
     {
         $book_name = $book->book_name;

@@ -44,7 +44,7 @@
                     </div>
                     <div class="divider"></div>
                     <div>
-                        <Link href="/books"><< Back</Link>
+                        <Link :href="route('books')"><< Back</Link>
                     </div>
                 </div>
             </div>

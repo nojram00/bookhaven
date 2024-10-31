@@ -20,7 +20,7 @@
                         </details>
                     </li>
                     <li>
-                        <Link :href="route('books')">Books</Link>
+                        <Link :href="route('books')">Library</Link>
                     </li>
                     <li>
                         <Link :href="route('my-orders')">My Orders</Link>

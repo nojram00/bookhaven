@@ -47,7 +47,7 @@ Route::controller(OrderController::class)->group(function(){
 });
 
 Route::controller(BookController::class)->group(function(){
-    Route::get('/books', 'index')->middleware(['auth'])->name('books');
+    Route::get('/library', 'index')->middleware(['auth'])->name('books');
     Route::get('/dashboard', 'book_dashboard')->middleware(['auth', 'admin'])->name('dashboard');
     Route::get('/book/{book}', 'edit_book')->middleware(['auth', 'admin'])->name('edit-book');
     Route::post('/book/{book}', 'save_book')->middleware(['auth','admin'])->name('save-book');
