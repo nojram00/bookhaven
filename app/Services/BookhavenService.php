@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\Order;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -52,5 +53,19 @@ class BookhavenService {
             'datetime' => \now()
         ]);
 
+    }
+
+    public function upload_file(Request $request)
+    {
+        if($request->hasFile('cover_photo'))
+        {
+            $path = $request
+                    ->file('cover_photo')
+                    ->store('cover_photo', 'public');
+
+            return $path;
+        }
+
+        return null;
     }
 }

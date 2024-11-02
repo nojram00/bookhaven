@@ -35,3 +35,13 @@ Artisan::command('insert-log', function(){
         'datetime' => now()
     ]);
 });
+
+Artisan::command('add-su', function(){
+    User::factory()->create([
+        'name' => 'Admin',
+        'email' => 'admin@example.com',
+        'password' => bcrypt('changeme'),
+        'role' => 'admin'
+    ]);
+});
+

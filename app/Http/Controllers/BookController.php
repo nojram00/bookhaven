@@ -120,7 +120,7 @@ class BookController extends Controller
             'price' => $request->input('price'),
             'genre' => $request->input('genre'),
             'book_overview' => $request->input('book_overview'),
-            'cover_photo' => $path ?? \null,
+            'cover_photo' => $this->service->upload_file($request),
             'year_published' => $request->input('year_published')
         ]);
 
@@ -156,11 +156,6 @@ class BookController extends Controller
             'year_published' => ['required', 'digits:4', 'integer', 'before_or_equal:' . date('Y')]
         ]);
 
-        if($request->file('cover_photo'))
-        {
-            $path = $request->file('cover_photo')->store('cover_photo', 'public');
-        }
-
         $book = Book::create(
             [
                 'book_name' => $request->input('book_name'),
@@ -169,7 +164,7 @@ class BookController extends Controller
                 'genre' => $request->input('genre'),
                 'book_overview' => $request->input('book_overview'),
                 'year_published' => $request->input('year_published'),
-                'cover_photo' => $path ?? \null,
+                'cover_photo' => $this->service->upload_file($request),
             ]
         );
 
@@ -194,7 +189,7 @@ class BookController extends Controller
             ['password' => ['required', 'current_password']]
         );
 
-        if($validated)
+        if(!empty($validated))
         {
             $deleted = $book->delete();
 
