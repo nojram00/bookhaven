@@ -128,10 +128,10 @@ class BookController extends Controller
         if($updated)
         {
             $this->service->save_to_log("Edit book, $book->book_name");
-            return redirect(route('edit-book', $book))->with('Message', 'Book Updated!');
+            return Redirect::route('books')->with('message', 'Book Updated!');
         }
 
-        return redirect(route('edit-book', $book))->with('Error', 'Book not updated. Please try again');
+        return redirect(route('edit-book', $book))->with('error', 'Book not updated. Please try again');
     }
 
     public function create()
