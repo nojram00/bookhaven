@@ -1,4 +1,5 @@
 <template>
+    <Head title="Book Dashboard"/>
     <MainLayout>
 
         <div v-if="$page.props.flash.message" @click="$page.props.flash.message = null" class="top-0 cursor-pointer fixed left-1/2 m-3">
@@ -57,7 +58,7 @@
 <script setup>
 import MainLayout from '@/Layouts/Bookhaven/MainLayout.vue';
 import { reactive, computed, onMounted, onUnmounted } from 'vue';
-import { usePage, Link } from '@inertiajs/vue3';
+import { usePage, Link, Head } from '@inertiajs/vue3';
 
 defineProps({
     books : {
