@@ -1,25 +1,26 @@
-# Installing Composer Dependencies
-FROM composer:latest as composer
-
-WORKDIR /app
-
-COPY composer.json composer.lock ./
-
-RUN composer install --no-dev --prefer-dist
-
 
 # Run server / host
 FROM php:8.1-fpm
 
-WORKDIR /app
+WORKDIR /var/www/html
 
-COPY --from=composer /app/vendor vendor/
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    curl \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
+    && docker-php-ext-install pdo pdo_mysql
+
+RUN curl https://getcomposer.org/install | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/mongodb.ini
 
 COPY . .
 
-RUN docker-php-ext-install pdo pdo_mysql
+RUN composer update
 
-RUN docker-php-ext-enable pdo_mysql
+RUN composer install
 
 EXPOSE 8000
 
