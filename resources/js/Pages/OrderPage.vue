@@ -41,13 +41,13 @@ const filter = () => {
 
     if (data.category.length > 0)
     {
-        router.get('/books', {
+        router.get(route('books'), {
             category : data.category
         });
     }
     else
     {
-        router.get('/books');
+        router.get(route('books'));
     }
 
 }
