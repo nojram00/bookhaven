@@ -43,5 +43,7 @@ Artisan::command('add-su', function(){
         'password' => bcrypt('changeme'),
         'role' => 'admin'
     ]);
-});
+
+    $this->comment('Superuser created! \nname: Admin\nemail: admin@example.com\npassword: changeme');
+})->purpose('Create a superuser');
 
