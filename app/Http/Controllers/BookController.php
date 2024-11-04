@@ -9,6 +9,7 @@ use App\Rules\BookGenre;
 use App\Services\BookhavenService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class BookController extends Controller
@@ -151,7 +152,7 @@ class BookController extends Controller
             'author' => ['required','string'],
             'price' => ['required','numeric'],
             'genre' => ['required', new BookGenre()],
-            'book_overview' => ['string'],
+            'book_overview' => ['string', 'nullable'],
             'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'year_published' => ['required', 'digits:4', 'integer', 'before_or_equal:' . date('Y')]
         ]);
@@ -168,15 +169,13 @@ class BookController extends Controller
             ]
         );
 
-        // dd($book);
-
         if($book)
         {
             $this->service->save_to_log("Create book, $book->book_name");
-            return redirect(route('add-book'))->with('Message','Book Created!');
+            return Redirect::route('add-book');
         }
 
-        return redirect(route('add-book'))->with('Error', 'Book not created');
+        return redirect(route('add-book'))->with('error', 'Book not created');
     }
 
     /**

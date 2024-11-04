@@ -45,14 +45,17 @@ class BookhavenService {
 
     public function save_to_log($message_log)
     {
-        $user_id = Auth::user()->id;
+        try {
+            $user_id = Auth::user()->id;
 
-        ActivityLog::create([
-            'user_id' => $user_id,
-            'log' => $message_log,
-            'datetime' => \now()
-        ]);
+            ActivityLog::create([
+                'user_id' => $user_id,
+                'log' => $message_log,
+                'datetime' => \now()
+            ]);
+        } catch (\Throwable $th) {
 
+        }
     }
 
     public function upload_file(Request $request)
