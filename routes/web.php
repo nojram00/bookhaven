@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -55,6 +56,10 @@ Route::controller(BookController::class)->group(function(){
 
 Route::controller(ActivityLogController::class)->group(function(){
     Route::get('/activity-log', 'index')->middleware(['auth'])->name('activity-log');
+});
+
+Route::controller(FileController::class)->group(function(){
+    Route::get('/image/{fileId}', 'index')->name('image');
 });
 
 require __DIR__.'/auth.php';

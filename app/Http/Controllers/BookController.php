@@ -6,6 +6,7 @@ use App\Http\Requests\CreateBookRequest;
 use App\Http\Requests\UpdateBookInfo;
 use App\Models\Book;
 use App\Rules\BookGenre;
+use App\Services\AppwriteStorageService;
 use App\Services\BookhavenService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,15 +17,17 @@ class BookController extends Controller
 {
 
     protected $service;
+    protected $appwriteStorage;
     /**
      *  Injects the Bookhaven Service which handles writing logs and creating orders.
      *
      *
      */
 
-    public function __construct(BookhavenService $service)
+    public function __construct(BookhavenService $service, AppwriteStorageService $appwriteStorage)
     {
         $this->service = $service;
+        $this->appwriteStorage = $appwriteStorage;
     }
 
     /**
@@ -52,7 +55,6 @@ class BookController extends Controller
 
         $books = $books->paginate(6);
 
-        // dd($books);
         return Inertia::render('OrderPage', [
             'books' => $books,
             'genre' => $genre,
@@ -110,9 +112,21 @@ class BookController extends Controller
     public function save_book(Book $book, Request $request)
     {
 
+        $fileId = null;
+
         if ($request->hasFile('cover_photo'))
         {
-            $path = $request->file('cover_photo')->store('cover_photo', 'public');
+            $file = $request->file('cover_photo');
+
+            $filePath = $file->getPathname();
+            $uploadResult = $this->appwriteStorage->upload_image($filePath);
+
+            if(isset($uploadResult['error']))
+            {
+                abort(500);
+            }
+
+            $fileId = $uploadResult['$id'];
         }
 
         $updated = $book->update([
@@ -121,7 +135,7 @@ class BookController extends Controller
             'price' => $request->input('price'),
             'genre' => $request->input('genre'),
             'book_overview' => $request->input('book_overview'),
-            'cover_photo' => $this->service->upload_file($request),
+            'cover_photo' => $fileId ?? $book->cover_photo,
             'year_published' => $request->input('year_published')
         ]);
 
@@ -147,15 +161,34 @@ class BookController extends Controller
     public function create_book(Request $request)
     {
 
+        // dd($request);
+
         $request->validate([
             'book_name' => ['required','string'],
             'author' => ['required','string'],
             'price' => ['required','numeric'],
             'genre' => ['required', new BookGenre()],
             'book_overview' => ['string', 'nullable'],
-            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            // 'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'year_published' => ['required', 'digits:4', 'integer', 'before_or_equal:' . date('Y')]
         ]);
+
+        $fileId = null;
+
+        if($request->hasFile('cover_photo'))
+        {
+            $file = $request->file('cover_photo');
+
+            $filePath = $file->getPathname();
+            $uploadResult = $this->appwriteStorage->upload_image($filePath);
+
+            if(isset($uploadResult['error']))
+            {
+                abort(500);
+            }
+
+            $fileId = $uploadResult['$id'];
+        }
 
         $book = Book::create(
             [
@@ -165,7 +198,7 @@ class BookController extends Controller
                 'genre' => $request->input('genre'),
                 'book_overview' => $request->input('book_overview'),
                 'year_published' => $request->input('year_published'),
-                'cover_photo' => $this->service->upload_file($request),
+                'cover_photo' => $fileId,
             ]
         );
 
@@ -200,7 +233,5 @@ class BookController extends Controller
         }
 
         return redirect(route('dashboard'))->with('error','Book failed to delete.');
-
-
     }
 }

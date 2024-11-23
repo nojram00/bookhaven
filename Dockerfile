@@ -9,19 +9,20 @@
 # Run server / host
 FROM php:8.1-fpm as final
 
+WORKDIR /var/www/html
+
 RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev \
+    libpq-dev \
     zip \
     git \
     unzip \
     curl \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
-    && docker-php-ext-install pdo pdo_mysql
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql
 
-
-WORKDIR /var/www/html
 
 RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/mongodb.ini
 
@@ -35,6 +36,8 @@ COPY . .
 
 RUN composer install
 
+ENV APP_DEBUG=false \
+    APP_ENV='production'
 
 EXPOSE 8000
 
